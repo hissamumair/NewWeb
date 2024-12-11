@@ -1,5 +1,5 @@
 import  { useState } from 'react';
-import Navbar from '../components/Navbar';
+// import Navbar from '../components/Navbar';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([
@@ -34,7 +34,7 @@ const UserManagement = () => {
 
   return (
     <div className="p-6 mt-12">
-      <Navbar />
+      {/* <Navbar /> */}
 
       <h1 className="text-2xl font-semibold text-gray-800">User Management</h1>
       <p className="mt-4 text-gray-600">

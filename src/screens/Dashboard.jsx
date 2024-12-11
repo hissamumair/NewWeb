@@ -59,7 +59,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full w-full bg-gray-100 p-16 overflow-x-hidden">
+    <div className="flex flex-col h- w-full bg-gray-100 p-16 overflow-x-hidden">
       <Navbar />
       <h1 className="pt-4 text-3xl font-semibold text-gray-800">Dashboard</h1>
       
