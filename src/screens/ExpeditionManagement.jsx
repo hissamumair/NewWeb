@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Navbar from '../components/Navbar';
+// import Navbar from '../components/Navbar';
 
 const ExpeditionManagement = () => {
   // State to hold expeditions data
@@ -58,7 +58,7 @@ const ExpeditionManagement = () => {
 
   return (
     <div className="p-6 mt-14">
-      <Navbar />
+      {/* <Navbar /> */}
 
       <h1 className="text-2xl font-semibold text-gray-800">Expedition Management</h1>
       <p className="mt-4 text-gray-600">
