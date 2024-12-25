@@ -1,41 +1,65 @@
-import  { useState } from 'react';
-// import Navbar from '../components/Navbar';
+// UserManagement.js
+import { useState } from 'react';
+import {
+  useGetUsersQuery,
+  useAddUserMutation,
+  useUpdateUserRoleMutation,
+  useDeleteUserMutation,
+} from './../redux/reducers/user/userThunk';
 
 const UserManagement = () => {
-  const [users, setUsers] = useState([
-    { id: 1, name: 'John Doe', role: 'Admin' },
-    { id: 2, name: 'Jane Smith', role: 'User' },
-    { id: 3, name: 'Alice Johnson', role: 'User' },
-  ]);
+  const { data: users, isLoading, error } = useGetUsersQuery();
+  const [addUser] = useAddUserMutation();
+  const [updateUserRole] = useUpdateUserRoleMutation();
+  const [deleteUser] = useDeleteUserMutation();
 
   const [newUser, setNewUser] = useState({ name: '', role: 'User' });
 
-  const handleRoleChange = (id, newRole) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === id ? { ...user, role: newRole } : user
-      )
-    );
-  };
-
-  const handleAddUser = () => {
-    if (newUser.name.trim() !== '') {
-      setUsers((prevUsers) => [
-        ...prevUsers,
-        { id: Date.now(), name: newUser.name, role: newUser.role },
-      ]);
-      setNewUser({ name: '', role: 'User' }); // Reset input fields after adding
+  const handleRoleChange = async (id, newRole) => {
+    try {
+      await updateUserRole({ id, role: newRole }).unwrap();
+    } catch (err) {
+      console.error('Failed to update user role:', err);
     }
   };
 
-  const handleDeleteUser = (id) => {
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+  const handleAddUser = async () => {
+    if (newUser.name.trim() !== '') {
+      try {
+        await addUser(newUser).unwrap();
+        setNewUser({ name: '', role: 'User' }); // Reset form
+      } catch (err) {
+        console.error('Failed to add user:', err);
+      }
+    }
   };
+
+  const handleDeleteUser = async (id) => {
+    try {
+      await deleteUser(id).unwrap();
+    } catch (err) {
+      console.error('Failed to delete user:', err);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="p-6 mt-12">
+        <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 mt-12">
+        <div className="text-red-500">Error: {error.message}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 mt-12">
-      {/* <Navbar /> */}
-
       <h1 className="text-2xl font-semibold text-gray-800">User Management</h1>
       <p className="mt-4 text-gray-600">
         This is where you can manage users and their permissions.
@@ -78,7 +102,7 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users?.map((user) => (
               <tr key={user.id}>
                 <td className="py-2 px-4 text-gray-700">{user.name}</td>
                 <td className="py-2 px-4 text-gray-700">

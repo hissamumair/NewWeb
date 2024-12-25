@@ -1,23 +1,25 @@
+
 import { useState } from 'react';
-// import Navbar from '../components/Navbar';
+import {
+  useGetExpeditionsQuery,
+  useAddExpeditionMutation,
+  useUpdateExpeditionMutation,
+  useDeleteExpeditionMutation
+} from './../redux/reducers/features/expedition/expeditionThunks';
 
 const ExpeditionManagement = () => {
-  // State to hold expeditions data
-  const [expeditions, setExpeditions] = useState([
-    { id: 1, name: 'Mountain Expedition', location: 'Mount Everest', date: '2024-05-20' },
-    { id: 2, name: 'Desert Expedition', location: 'Sahara Desert', date: '2024-06-15' },
-    { id: 3, name: 'Rainforest Expedition', location: 'Amazon Rainforest', date: '2024-07-10' },
-  ]);
+  const { data: expeditions = [], isLoading, isError } = useGetExpeditionsQuery();
+  const [addExpedition] = useAddExpeditionMutation();
+  const [updateExpedition] = useUpdateExpeditionMutation();
+  const [deleteExpedition] = useDeleteExpeditionMutation();
 
   const [newExpedition, setNewExpedition] = useState({
     name: '',
     location: '',
     date: '',
   });
-
   const [editingExpedition, setEditingExpedition] = useState(null);
 
-  // Handle change in form input for new/edited expeditions
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewExpedition((prev) => ({
@@ -26,40 +28,43 @@ const ExpeditionManagement = () => {
     }));
   };
 
-  // Create a new expedition
-  const handleCreateExpedition = () => {
-    setExpeditions((prev) => [
-      ...prev,
-      { ...newExpedition, id: prev.length + 1 },
-    ]);
-    setNewExpedition({ name: '', location: '', date: '' });
+  const handleCreateExpedition = async () => {
+    try {
+      await addExpedition(newExpedition).unwrap();
+      setNewExpedition({ name: '', location: '', date: '' });
+    } catch (error) {
+      console.error('Failed to create expedition:', error);
+    }
   };
 
-  // Edit an existing expedition
-  const handleEditExpedition = (id) => {
-    const expeditionToEdit = expeditions.find((exp) => exp.id === id);
-    setEditingExpedition(expeditionToEdit);
+  const handleEditExpedition = (expedition) => {
+    setEditingExpedition(expedition);
+    setNewExpedition(expedition);
   };
 
-  // Update an edited expedition
-  const handleUpdateExpedition = () => {
-    setExpeditions((prev) =>
-      prev.map((exp) =>
-        exp.id === editingExpedition.id ? editingExpedition : exp
-      )
-    );
-    setEditingExpedition(null);
+  const handleUpdateExpedition = async () => {
+    try {
+      await updateExpedition(editingExpedition).unwrap();
+      setEditingExpedition(null);
+      setNewExpedition({ name: '', location: '', date: '' });
+    } catch (error) {
+      console.error('Failed to update expedition:', error);
+    }
   };
 
-  // Delete an expedition
-  const handleDeleteExpedition = (id) => {
-    setExpeditions((prev) => prev.filter((exp) => exp.id !== id));
+  const handleDeleteExpedition = async (id) => {
+    try {
+      await deleteExpedition(id).unwrap();
+    } catch (error) {
+      console.error('Failed to delete expedition:', error);
+    }
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading expeditions</div>;
 
   return (
     <div className="p-6 mt-14">
-      {/* <Navbar /> */}
-
       <h1 className="text-2xl font-semibold text-gray-800">Expedition Management</h1>
       <p className="mt-4 text-gray-600">
         This is where you can manage expeditions and their details.
@@ -75,38 +80,23 @@ const ExpeditionManagement = () => {
           type="text"
           name="name"
           placeholder="Expedition Name"
-          value={editingExpedition ? editingExpedition.name : newExpedition.name}
-          onChange={(e) => {
-            const { name, value } = e.target;
-            editingExpedition
-              ? setEditingExpedition({ ...editingExpedition, [name]: value })
-              : handleInputChange(e);
-          }}
+          value={newExpedition.name}
+          onChange={handleInputChange}
           className="border p-2 mb-4 w-full"
         />
         <input
           type="text"
           name="location"
           placeholder="Location"
-          value={editingExpedition ? editingExpedition.location : newExpedition.location}
-          onChange={(e) => {
-            const { name, value } = e.target;
-            editingExpedition
-              ? setEditingExpedition({ ...editingExpedition, [name]: value })
-              : handleInputChange(e);
-          }}
+          value={newExpedition.location}
+          onChange={handleInputChange}
           className="border p-2 mb-4 w-full"
         />
         <input
           type="date"
           name="date"
-          value={editingExpedition ? editingExpedition.date : newExpedition.date}
-          onChange={(e) => {
-            const { name, value } = e.target;
-            editingExpedition
-              ? setEditingExpedition({ ...editingExpedition, [name]: value })
-              : handleInputChange(e);
-          }}
+          value={newExpedition.date}
+          onChange={handleInputChange}
           className="border p-2 mb-4 w-full"
         />
 
@@ -129,19 +119,27 @@ const ExpeditionManagement = () => {
         </div>
       </div>
 
-      {/* Vertical Table for Expedition Details */}
+      {/* Expeditions List */}
       <div className="mt-6">
         {expeditions.map((expedition) => (
           <div key={expedition.id} className="border p-4 mb-4">
-            <h3 className="text-xl font-semibold text-gray-800">Expedition {expedition.id}</h3>
+            <h3 className="text-xl font-semibold text-gray-800">
+              Expedition {expedition.id}
+            </h3>
             <div className="mt-2">
-              <p className="text-gray-600"><strong>Name:</strong> {expedition.name}</p>
-              <p className="text-gray-600"><strong>Location:</strong> {expedition.location}</p>
-              <p className="text-gray-600"><strong>Date:</strong> {expedition.date}</p>
+              <p className="text-gray-600">
+                <strong>Name:</strong> {expedition.name}
+              </p>
+              <p className="text-gray-600">
+                <strong>Location:</strong> {expedition.location}
+              </p>
+              <p className="text-gray-600">
+                <strong>Date:</strong> {expedition.date}
+              </p>
             </div>
             <div className="flex mt-4">
               <button
-                onClick={() => handleEditExpedition(expedition.id)}
+                onClick={() => handleEditExpedition(expedition)}
                 className="bg-blue-500 text-white py-2 px-4 rounded mr-2"
               >
                 Edit

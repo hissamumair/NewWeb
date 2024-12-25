@@ -7,12 +7,7 @@ const Navbar = () => {
             Expedition Management System
           </h1>
         </div>
-        <nav className="flex space-x-8 text-gray-700">
-          <a href="/about" className="text-gray-800 hover:text-white">About Us</a>
-          <a href="/services" className="text-gray-800 hover:text-white">Services</a>
-          <a href="#faq" className="text-gray-800 hover:text-white">FAQ</a>
-          <a href="#contact" className="text-gray-800 hover:text-white">Contact</a>
-        </nav>
+      
         <div className="flex items-center space-x-4">
           <img
             src="src/assets/profile.png"

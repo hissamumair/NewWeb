@@ -1,35 +1,43 @@
-import { useState } from 'react';
+// TaskManagement.js
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTasks, addTask, toggleTask, deleteTask } from './taskThunks';
 
 const TaskManagement = () => {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: 'Task 1', completed: false },
-    { id: 2, title: 'Task 2', completed: false },
-    { id: 3, title: 'Task 3', completed: false },
-  ]);
-
+  const dispatch = useDispatch();
+  const { tasks, status, error } = useSelector((state) => state.tasks);
   const [newTask, setNewTask] = useState('');
+
+  useEffect(() => {
+    dispatch(fetchTasks());
+  }, [dispatch]);
 
   const handleTaskChange = (e) => {
     setNewTask(e.target.value);
   };
 
-  const addTask = () => {
+  const handleAddTask = () => {
     if (newTask.trim()) {
-      const newTaskObject = {
-        id: tasks.length + 1,
-        title: newTask,
-        completed: false,
-      };
-      setTasks([...tasks, newTaskObject]);
+      dispatch(addTask({ title: newTask, completed: false }));
       setNewTask('');
     }
   };
 
-  const toggleTaskCompletion = (id) => {
-    setTasks(tasks.map((task) =>
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
+  const handleToggleTask = (id) => {
+    dispatch(toggleTask(id));
   };
+
+  const handleDeleteTask = (id) => {
+    dispatch(deleteTask(id));
+  };
+
+  if (status === 'loading') {
+    return <div className="p-6">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-red-500">Error: {error}</div>;
+  }
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -44,7 +52,7 @@ const TaskManagement = () => {
           placeholder="Enter a new task"
         />
         <button
-          onClick={addTask}
+          onClick={handleAddTask}
           className="ml-4 p-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300"
         >
           Add Task
@@ -63,7 +71,7 @@ const TaskManagement = () => {
               <input
                 type="checkbox"
                 checked={task.completed}
-                onChange={() => toggleTaskCompletion(task.id)}
+                onChange={() => handleToggleTask(task.id)}
                 className="mr-4"
               />
               <span className={`flex-1 ${task.completed ? 'line-through' : ''}`}>
@@ -71,7 +79,7 @@ const TaskManagement = () => {
               </span>
             </div>
             <button
-              onClick={() => setTasks(tasks.filter((t) => t.id !== task.id))}
+              onClick={() => handleDeleteTask(task.id)}
               className="text-red-500 hover:text-red-600 transition duration-300"
             >
               Delete
