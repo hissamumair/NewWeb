@@ -13,7 +13,7 @@ const Loader = () => (
 // DashboardCard component
 const DashboardCard = ({ icon: Icon, title, value, gradient }) => (
   <div
-    className={`w-62 h-40 ${gradient} p-14 rounded-lg shadow-lg text-white hover:scale-105 transition-transform duration-300`}
+    className={`w-62 h-40 ${gradient} p-14 rounded-lg shadow-lg text-black hover:scale-105 transition-transform duration-300 bg-red-300`}
   >
     <div className="flex items-center mb-2">
       {/* <Icon className="text-xl mr-2" /> */}
@@ -74,5 +74,4 @@ const Dashboard = () => {
     </div>
   );
 };
-
 export default Dashboard;
