@@ -1,23 +1,26 @@
 // UserManagement.js
 import { useState } from 'react';
 import {
-  useGetUsersQuery,
+  useGetAllUsersQuery,
   useAddUserMutation,
-  useUpdateUserRoleMutation,
+  // useUpdateUserRoleMutation,
   useDeleteUserMutation,
+  useUpdateUserMutation,
 } from './../redux/reducers/user/userThunk';
 
 const UserManagement = () => {
-  const { data: users, isLoading, error } = useGetUsersQuery();
+  const { data, isLoading, error } = useGetAllUsersQuery();
   const [addUser] = useAddUserMutation();
-  const [updateUserRole] = useUpdateUserRoleMutation();
+  // const [updateUserRole] = useUpdateUserRoleMutation();
+  const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
 
-  const [newUser, setNewUser] = useState({ name: '', role: 'User' });
+  const [newUser, setNewUser] = useState({ name: '', role: 'user' });
 
-  const handleRoleChange = async (id, newRole) => {
+  const handleRoleChange = async (updatedUser, newRole) => {
     try {
-      await updateUserRole({ id, role: newRole }).unwrap();
+      const user = {_id:updatedUser._id,role:newRole}
+      await updateUser(user).unwrap();
     } catch (err) {
       console.error('Failed to update user role:', err);
     }
@@ -26,7 +29,8 @@ const UserManagement = () => {
   const handleAddUser = async () => {
     if (newUser.name.trim() !== '') {
       try {
-        await addUser(newUser).unwrap();
+        const userTobeAdd = {name:newUser.name, email:newUser.email, password:"123456",contactNo:"02394832094839"}
+        await addUser(userTobeAdd).unwrap();
         setNewUser({ name: '', role: 'User' }); // Reset form
       } catch (err) {
         console.error('Failed to add user:', err);
@@ -75,14 +79,20 @@ const UserManagement = () => {
             onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
             className="border p-2 rounded-md w-64"
           />
+               <input
+            type="text"
+            placeholder="Enter user email"
+            value={newUser.email}
+            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+            className="border p-2 rounded-md w-64"
+          />
           <select
             value={newUser.role}
             onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
             className="border p-2 rounded-md"
           >
-            <option value="Admin">Admin</option>
-            <option value="User">User</option>
-            <option value="Guest">Guest</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
           </select>
           <button
             onClick={handleAddUser}
@@ -97,28 +107,29 @@ const UserManagement = () => {
           <thead>
             <tr>
               <th className="py-2 px-4 text-left text-gray-600">Name</th>
+              <th className="py-2 px-4 text-left text-gray-600">Email</th>
               <th className="py-2 px-4 text-left text-gray-600">Role</th>
               <th className="py-2 px-4 text-left text-gray-600">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users?.map((user) => (
-              <tr key={user.id}>
+            {data?.users?.map((user,index) => (
+              <tr key={index}>
                 <td className="py-2 px-4 text-gray-700">{user.name}</td>
+                <td className="py-2 px-4 text-gray-700">{user.email}</td>
                 <td className="py-2 px-4 text-gray-700">
                   <select
                     value={user.role}
-                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                    onChange={(e) => handleRoleChange(user, e.target.value)}
                     className="border p-1 rounded-md"
                   >
-                    <option value="Admin">Admin</option>
-                    <option value="User">User</option>
-                    <option value="Guest">Guest</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
                   </select>
                 </td>
                 <td className="py-2 px-4">
                   <button
-                    onClick={() => handleDeleteUser(user.id)}
+                    onClick={() => handleDeleteUser(user._id)}
                     className="text-red-500 hover:text-red-700"
                   >
                     Delete
