@@ -8,16 +8,7 @@ const Navbar = () => {
           </h1>
         </div>
       
-        <div className="flex items-center space-x-4">
-          <img
-            src="src/assets/profile.png"
-            alt="Profile"
-            className="w-10 h-10 rounded-full border-2 border-green-500"
-          />
-          <button className="bg-red-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-300">
-            + Post a Job
-          </button>
-        </div>
+    
       </div>
     </header>
   );

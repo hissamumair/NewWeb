@@ -6,7 +6,7 @@ export const bookingApi = createApi({
   reducerPath: 'bookingApi', 
   baseQuery: fetchBaseQuery({
     baseUrl: baseURL,
-    prepareHeaders: async (headers, { getState }) => {
+    prepareHeaders: async (headers,) => {
       const token = await AsyncStorage.getItem('token');
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
@@ -20,6 +20,10 @@ export const bookingApi = createApi({
       query: (userId) => `/api/booking/getAllBookingForUser/${userId}`,
       providesTags: ["Booking"], 
     }),
+    getAllBookings: build.query({
+      query: () => `/api/booking`,
+      providesTags: ["Booking"], 
+    }),
     createBooking: build.mutation({
       query: (bookingData) => ({
         url: '/api/booking/create', 
@@ -27,7 +31,21 @@ export const bookingApi = createApi({
         body: bookingData, 
       }),
       invalidatesTags: ['Booking'],
-
+    }),
+    updateBooking: build.mutation({
+      query: ({ bookingId, bookingData }) => ({
+        url: `/api/booking/update/${bookingId}`,
+        method: 'PUT',
+        body: bookingData,
+      }),
+      invalidatesTags: ['Booking'],
+    }),
+    deleteBooking: build.mutation({
+      query: (bookingId) => ({
+        url: `/api/booking/delete/${bookingId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Booking'],
     }),
   }),
 });
@@ -35,5 +53,8 @@ export const bookingApi = createApi({
 // Export hooks for each endpoint
 export const {
   useGetAllBookingsForUserQuery,
-  useCreateBookingMutation
+  useCreateBookingMutation,
+  useUpdateBookingMutation,
+  useDeleteBookingMutation,
+  useGetAllBookingsQuery,
 } = bookingApi;

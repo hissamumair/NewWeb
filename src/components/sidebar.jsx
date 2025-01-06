@@ -1,7 +1,16 @@
 
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Login from '../screens/Auth/Login';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    console.log("User signed out");
+    navigate('/Login'); 
+  };
+
   return (
     <aside className="w-64  mt-20 ml-2 rounded-lg shadow-xl p-10 mt-10 ">
       <div className="text-center mb-8">
@@ -20,21 +29,27 @@ const Sidebar = () => {
         <Link to="/user-management" className="flex items-center text-sm text-gray-700 hover:bg-green-50 p-2 rounded-md transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
           <span className="mr-3 text-sm">👤</span> User Management
         </Link>
-        <Link to="/expedition-management" className="flex items-center text-sm text-gray-700 hover:bg-green-50 p-2 rounded-md transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
-          <span className="mr-3">📃</span> Expedition Management
-        </Link>
+       
         <Link to="/booking-management" className="flex items-center text-sm text-gray-700 hover:bg-green-50 p-2 rounded-md transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
           <span className="mr-3">🗂️</span> Booking Management
         </Link>
-        <Link to="/car-booking" className="flex items-center text-gray-700 text-sm hover:bg-green-50 p-2 rounded-md transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
-          <span className="mr-3">🚗</span> Car Booking 
-        </Link>
+       
         <Link to="/account-setting" className="flex items-center text-gray-700 text-sm hover:bg-green-50 p-2 rounded-md transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
           <span className="mr-3">⚙️</span> Account Settings
         </Link>
-        <Link to="/logout" className="flex items-center text-gray-700 hover:bg-red-50 p-2 text-sm rounded-md transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
-          <span className="mr-3">🚪</span> Sign Out
+        <Link to="/chat" className="flex items-center text-gray-700 text-sm hover:bg-green-50 p-2 rounded-md transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
+          <span className="mr-3">⚙️</span> chats
         </Link>
+        {/* <Link to="/logout" className="flex items-center text-gray-700 hover:bg-red-50 p-2 text-sm rounded-md transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
+
+          <span className="mr-3">🚪</span> Sign Out
+        </Link> */}
+        <button
+          onClick={handleSignOut}
+          className="flex items-center text-gray-700 hover:bg-red-50 p-2 text-sm rounded-md transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
+        >
+          <span className="mr-3">🚪</span> Sign Out
+        </button>
       </nav>
     </aside>
   );

@@ -12,6 +12,8 @@ import About from "./components/NavBarScreen/About";
 // import  setAuthenticated  from "./redux/Reducers/users/userReducer";
 import { useEffect, useState } from "react";
 import Login from "./screens/Auth/Login";
+import ChatScreen from "./screens/chat";
+import Chat from "./screens/chat";
 
 const App = () => {
   // const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -58,6 +60,8 @@ const App = () => {
                     element={<BookingManagement />}
                   />
                   <Route path="/car-booking" element={<CarBooking />} />
+                  <Route path="/chat" element={<Chat />} />
+
                   <Route path="/account-setting" element={<AccountSetting />} />
                 </Routes>
               </div>
