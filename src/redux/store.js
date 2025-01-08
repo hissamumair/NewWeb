@@ -50,6 +50,7 @@ import bookingReducer  from "./reducers/booking/bookingReducer";
 import { carbookingApi } from "./../redux/reducers/carbooking /carbookingThunk";
 import { expeditionApi } from "./reducers/features/expedition/expeditionThunks";
 import { bookingApi } from "./reducers/booking/bookingThunk";
+import { messageApi } from "./reducers/messages/messageThunk";
 
 
 const store = configureStore({
@@ -64,6 +65,8 @@ const store = configureStore({
     [carbookingApi.reducerPath]: carbookingApi.reducer,
     [expeditionApi.reducerPath]: expeditionApi.reducer, // Added expedition reducer
     [bookingApi.reducerPath]: bookingApi.reducer, // Added expedition reducer
+    [messageApi.reducerPath]: messageApi.reducer, // Added expedition reducer
+
 
   },
   middleware: (getDefaultMiddleware) =>
@@ -75,7 +78,10 @@ const store = configureStore({
       bookingApi.middleware,
       carbookingApi.middleware,
       expeditionApi.middleware, // Added expedition middleware
-      bookingApi.middleware, // Added expedition middleware
+      bookingApi.middleware, 
+      messageApi.middleware, 
+
+      // Added expedition middleware
 
     ]),
 });
