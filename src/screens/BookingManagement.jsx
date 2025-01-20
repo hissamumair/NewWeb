@@ -187,7 +187,7 @@ const BookingManagement = () => {
                   </button>
                   <button
                     className="text-red-600 hover:text-red-800"
-                    onClick={() => handleDeleteBooking(booking.id)}
+                    onClick={() => handleDeleteBooking(booking._id)}
                   >
                     Delete
                   </button>
