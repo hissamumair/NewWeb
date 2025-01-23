@@ -7,7 +7,7 @@ import Sidebar from "./components/sidebar";
 import ExpeditionManagement from "./screens/ExpeditionManagement";
 import BookingManagement from "./screens/BookingManagement";
 import CarBooking from "./screens/CarBooking";
-import AccountSetting from "./screens/AccountSetting";
+// import AccountSetting from "./screens/AccountSetting";
 import About from "./components/NavBarScreen/About";
 // import  setAuthenticated  from "./redux/Reducers/users/userReducer";
 import { useEffect, useState } from "react";
@@ -38,6 +38,12 @@ const App = () => {
         path="/login"
         element={isAuthenticated == "okay" ? <Navigate to="/dashboard" /> : <Login />}
       />
+
+
+<Route
+        path="/Signout"
+        element={isAuthenticated == "okay" ? <Navigate to="/login" /> : <Login />}
+      />
       <Route path="/about" element={<About />} />
 
       {/* Protected Routes */}
@@ -62,7 +68,7 @@ const App = () => {
                   <Route path="/car-booking" element={<CarBooking />} />
                   <Route path="/chat" element={<Chat />} />
 
-                  <Route path="/account-setting" element={<AccountSetting />} />
+                  {/* <Route path="/account-setting" element={<AccountSetting />} /> */}
                 </Routes>
               </div>
             </div>

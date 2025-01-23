@@ -33,8 +33,8 @@ export const bookingApi = createApi({
       invalidatesTags: ['Booking'],
     }),
     updateBooking: build.mutation({
-      query: ({ bookingId, bookingData }) => ({
-        url: `/api/booking/update/${bookingId}`,
+      query: (bookingData) => ({
+        url: `/api/booking/${bookingData.id}`,
         method: 'PUT',
         body: bookingData,
       }),
@@ -42,7 +42,7 @@ export const bookingApi = createApi({
     }),
     deleteBooking: build.mutation({
       query: (bookingId) => ({
-        url: `/api/booking/delete/${bookingId}`,
+        url: `/api/booking/${bookingId}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Booking'],
