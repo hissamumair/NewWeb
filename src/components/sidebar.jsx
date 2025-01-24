@@ -16,7 +16,7 @@ const Sidebar = () => {
     <aside className="w-64  mt-20 ml-2 rounded-lg shadow-xl p-10 mt-10 ">
       <div className="text-center mb-8">
         <img
-          src="src/assets/user.png"
+          src="/user.png"
           alt="Profile"
           className="w-24 h-24 rounded-full mx-auto border-4 border-green-500 shadow-md"
         />
